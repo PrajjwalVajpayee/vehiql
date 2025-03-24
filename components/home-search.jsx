@@ -5,6 +5,7 @@ import { Input } from "./ui/input";
 import { Camera, Upload } from "lucide-react";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const HomeSearch = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -12,6 +13,26 @@ const HomeSearch = () => {
   const [imagePreview, setImagePreview] = useState("");
   const [searchImage, setSearchImage] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
+
+  const router = useRouter();
+
+
+
+  const handleTextSubmit = async (e) => {
+    e.preventDefault();
+    if(!searchTerm.trim()){
+     toast.error('please enter the search term'); 
+    }
+    router.push(`/cars?search=${encodeURIComponent(searchTerm)}`)
+  };
+
+  const handleImageSubmit = async (e) => {
+    e.preventDefault();
+    if(!searchImage){
+      toast.error("Please upload the image first.")
+      return; 
+    }
+  };
 
   // Define onDrop before using it in useDropzone
   const onDrop = (acceptedFiles) => {
@@ -24,7 +45,18 @@ const HomeSearch = () => {
       setIsUploading(true);
       setSearchImage(file);
 
-      const reader = FileReader();
+      const reader = new FileReader();
+      reader.onloadend = ()=>{
+        setImagePreview(reader.result);
+        setIsUploading(false);
+        toast.success("Image Uploaded Successfully")
+      };
+
+      reader.onerror=()=>{
+        setIsUploading(false);
+        toast.error("Failed to read the image")
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -37,15 +69,7 @@ const HomeSearch = () => {
       maxFiles: 1,
     });
 
-  const handleTextSubmit = async (e) => {
-    e.preventDefault();
-    console.log("Search Term:", searchTerm);
-  };
-
-  const handleImageSubmit = async (e) => {
-    e.preventDefault();
-    console.log("Uploading Image...");
-  };
+  
 
   return (
     <div>
@@ -81,17 +105,18 @@ const HomeSearch = () => {
           <form onSubmit={handleImageSubmit}>
             <div>
               {imagePreview ? (
-                <div>
-                  <img src={imagePreview} alt="Uploaded preview" className="w-32 h-32 object-cover rounded-md" />
+                <div className="flex flex-col items-center">
+                  <img src={imagePreview} alt="Car preview" className="h-40 object-contain rounded-md" />
                   <Button
-                    type="button"
+                    variant='outline'
                     className="mt-2"
                     onClick={() => {
                       setImagePreview("");
                       setSearchImage(null);
+                      toast.info("Image removed")
                     }}
                   >
-                    Remove
+                    Remove Image
                   </Button>
                 </div>
               ) : (
@@ -102,7 +127,7 @@ const HomeSearch = () => {
                   <input {...getInputProps()} />
                  <div className="flex flex-col items-center">
                  <Upload className="h-12 w-12 text-gray-400 mb-2"/>
-                  <p>
+                  <p className="text-gray-400 mb-2">
                     {isDragActive && !isDragReject
                       ? "Leave the file here to upload"
                       : "Drag & drop a car image or click to select"}
@@ -113,6 +138,15 @@ const HomeSearch = () => {
                 </div>
               )}
             </div>
+
+            {imagePreview && <Button
+            type='submit'
+            className='w-full mt-2'
+            disabled={isUploading}
+            >
+              {isUploading ? "Uploading...": 'Search with this Image'}
+              
+              </Button>}
           </form>
         </div>
       )}
