@@ -33,14 +33,14 @@ const Header = async ({isAdminPage = false}) => {
             isAdminPage ? <Link href='/' >
             <Button variant='outline' className='flex items-center gap-2'>
               <ArrowLeft size={18}/>
-              <span className='hidden md:inline'>Back to App</span>
+              <span className='hidden md:inline cursor-pointer'>Back to App</span>
             </Button>
             </Link>:
            ( <SignedIn>
           <Link href='/saved-cars'>
             <Button>
               <Heart size={18}/>
-              <span className='hidden md:inline'>Saved Cars</span>
+              <span className='hidden md:inline cursor-pointer'>Saved Cars</span>
             </Button>
             </Link>
           {
@@ -48,13 +48,13 @@ const Header = async ({isAdminPage = false}) => {
           (<Link href='/reservations'>
           <Button variant='outline'>
             <CarFront size={18}/>
-            <span className='hidden md:inline'>My Reservations</span>
+            <span className='hidden md:inline cursor-pointer'>My Reservations</span>
           </Button>
           </Link>):
           (<Link href='/admin'>
           <Button variant='outline'>
             <Layout size={18}/>
-            <span className='hidden md:inline'>Admin Portal</span>
+            <span className='hidden md:inline cursor-pointer'>Admin Portal</span>
           </Button>
           </Link>)
           }
@@ -62,7 +62,7 @@ const Header = async ({isAdminPage = false}) => {
 
           <SignedOut>
             <SignInButton forceRedirectUrl='/'>
-              <Button variant='outline'>Login</Button>
+              <Button className='cursor-pointer' variant='outline'>Login</Button>
             </SignInButton>
           </SignedOut>
 
