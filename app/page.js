@@ -1,5 +1,5 @@
 import { getFeaturedCars } from "@/actions/home";
-import CarCard from "@/components/carCard";
+import {CarCard} from "@/components/carCard.jsx";
 import HomeSearch from "@/components/home-search";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
