@@ -1,21 +1,55 @@
 
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card, CardContent } from './ui/card'
 import Image from 'next/image'
-import { CarIcon, Heart } from 'lucide-react'
+import { CarIcon, Heart, Loader2 } from 'lucide-react'
 import { Button } from './ui/button'
 import { Badge } from './ui/badge'
 import { useRouter } from 'next/navigation'
+import useFetch from '@/hooks/use-fetch'
+import { toggleSavedCar } from '@/actions/car-listing'
+import { useAuth } from '@clerk/nextjs'
+import { toast } from 'sonner'
 
-const CarCard = ({car}) => {
+export const CarCard = ({car}) => {
 
     const [isSaved,setIsSaved] = useState(car.wishlisted)
     const router = useRouter()
+    const {isSignedIn} = useAuth();
+    const {
+        loading:isToggling,
+        fn:toggleSavedCarfn,
+        data:toggleResult,
+        error:toggleError,
+    } = useFetch(toggleSavedCar);
 
-    const handleToggleSave = (e)=>{
+    useEffect(()=>{
+        if(toggleResult?.success && toggleResult.saved !== isSaved){
+            setIsSaved(toggleResult.saved);
+            toast.success(toggleResult.message)
+        }
+       },[toggleResult,isSaved])
+       useEffect(()=>{
+        if(toggleError){
+            toast.error("Failed to update favourites.");
+        }
+       },[toggleError])
 
+    const handleToggleSave = async(e)=>{
+          e.preventDefault();
+          if(!isSignedIn){
+            toast.error("Please sign in to save cars");
+            router.push("/sign-in");
+            return;
+          }
+           if(isToggling) return;
+           await toggleSavedCarfn(car.id);
     }
+
+  
+
+
   return (
   
       <Card className='overflow-hidden hover:shadow-lg transition group py-0'>
@@ -35,7 +69,11 @@ const CarCard = ({car}) => {
         }`}
         onClick={handleToggleSave}
         >
-            <Heart className={isSaved ? "fill-current": "" }/>
+            {isToggling ? (
+                <Loader2 className='h-4 w-4 animate-spin'/>
+            ):(
+                <Heart className={isSaved ? "fill-current": ""}/>
+            )}
         </Button>
          </div>
          <CardContent className='p-4'>
@@ -71,4 +109,4 @@ const CarCard = ({car}) => {
   )
 }
 
-export default CarCard
+

@@ -21,6 +21,7 @@ const Header = async ({isAdminPage = false}) => {
         src={"/logo.png"}
         width={200}
         height={60}
+        alt='image'
         className='h-12 w-auto object-contain'
         />
            {isAdminPage &&(
