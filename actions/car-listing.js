@@ -1,6 +1,6 @@
 "use server";
 
-import { serializeCarData } from "../lib/helper.js";
+import { serializeCarData } from "../lib/helpers.js";
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
