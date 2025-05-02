@@ -8,7 +8,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Info } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { CarCard } from '@/components/carCard'
+import { CarCard } from '@/components/car-card'
 export const CarListings = () => {
   const searchParams = useSearchParams()
   const router = useRouter();
