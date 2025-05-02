@@ -44,7 +44,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import useFetch from "@/hooks/use-fetch";
 import { getCars, deleteCar, updateCarStatus } from "@/actions/cars";
-import { formatCurrency } from "@/lib/helper.js";
+import { formatCurrency } from "@/lib/helpers.js";
 import Image from "next/image";
 
 export const CarsList = () => {
