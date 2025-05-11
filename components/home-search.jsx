@@ -176,7 +176,8 @@ useEffect(()=>{
             className='w-full mt-2'
             disabled={isUploading || isProcessing}
             >
-              {isUploading ? "Uploading...": is ? 'Analyzing things':'Search with this Image'}
+              {isUploading ? "Uploading..." : isProcessing ? 'Analyzing things' : 'Search with this Image'}
+
               
               </Button>}
           </form>
